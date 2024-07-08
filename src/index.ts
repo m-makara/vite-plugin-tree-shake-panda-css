@@ -3,31 +3,35 @@ import * as process from "process";
 import * as path from "path";
 
 type ResolvePandaDependenciesConfig = {
-  entryPath: string;
-  root?: string;
   envName?: string;
 };
-export function treeShakePandaCss({
-  entryPath,
-  root,
-  envName = "__TREE_SHAKE_PANDA_DEPENDENCIES__",
-}: ResolvePandaDependenciesConfig): Plugin {
+export function treeShakePandaCss(
+  config?: ResolvePandaDependenciesConfig
+): Plugin {
   const moduleDependencies = new Map();
   const modulesToResolve: Array<() => void> = [];
+  const trackDeps = new Set<string>();
+  let allCssParsed = true;
 
-  let configRoot: string;
+  const envName = config?.envName ?? "__TREE_SHAKE_PANDA_DEPENDENCIES__";
+
+  const removeModule = (id: string) => {
+    trackDeps.delete(id);
+    if (!id.endsWith(".css")) {
+      allCssParsed = Array.from(trackDeps).every((moduleId) =>
+        moduleId.endsWith(".css")
+      );
+    }
+  };
 
   return {
     name: "vite-plugin-tree-shake-panda-css",
     apply: "build",
     enforce: "pre",
 
-    configResolved(config) {
-      configRoot = config.root;
-    },
-
     moduleParsed(moduleInfo) {
-      if (moduleInfo.id === path.resolve(root ?? configRoot, entryPath)) {
+      removeModule(moduleInfo.id);
+      if (allCssParsed) {
         modulesToResolve.forEach((callback) => callback());
       }
     },
@@ -48,15 +52,17 @@ export function treeShakePandaCss({
             ...Array.from(moduleDependencies.values()).map((set) => [...set])
           )
         );
-
         process.env[envName] = JSON.stringify(Array.from(result));
       }
     },
     transform(_, id: string) {
+      trackDeps.add(id);
       if (id.endsWith(".css")) {
         return new Promise<void>((resolve) => {
           modulesToResolve.push(resolve);
         });
+      } else {
+        allCssParsed = false;
       }
     },
   };
