@@ -20,8 +20,6 @@ export default defineConfig({
   plugins: [
     //...other plugins
     treeShakePandaCss({
-      entryPath: "./src/main.tsx", //Path to your project entry point
-      //root -- optional. Path to your projects root. Defaults to config root
       //envName -- optional. Name of the environment variable where the resolved dependencies are. Defaults to __TREE_SHAKE_PANDA_DEPENDENCIES__
     }),
   ],
