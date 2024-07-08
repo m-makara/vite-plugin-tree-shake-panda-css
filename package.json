@@ -1,17 +1,17 @@
 {
   "name": "@m-makara/vite-plugin-tree-shake-panda-css",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Vite Plugin to tree-shake project dependencies for Panda CSS during build",
   "exports": {
-    "import": {
-      "types": "./dist/esm/index.d.ts",
-      "import": "./dist/esm/index.js"
-    },
-    "require": {
-      "types": "./dist/cjs/index.d.ts",
-      "require": "./dist/cjs/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     }
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -24,15 +24,14 @@
     "vite-plugin"
   ],
   "scripts": {
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build": "rm -rf dist && pnpm build:esm && pnpm build:cjs",
+    "build": "rm -rf dist && pnpm tsup",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Matej Makara",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.12.2",
+    "tsup": "^8.1.0",
     "typescript": "^5.5.3"
   },
   "peerDependencies": {
