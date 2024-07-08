@@ -1,6 +1,6 @@
 {
   "name": "@m-makara/vite-plugin-tree-shake-panda-css",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Vite Plugin to tree-shake project dependencies for Panda CSS during build",
   "exports": {
     ".": {
