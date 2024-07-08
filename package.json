@@ -15,6 +15,10 @@
   "files": [
     "dist"
   ],
+  "repository": {
+    "url": "https://github.com/m-makara/vite-plugin-tree-shake-panda-css.git",
+    "type": "git"
+  },
   "scripts": {
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
