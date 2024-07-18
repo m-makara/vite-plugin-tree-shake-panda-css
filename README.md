@@ -4,7 +4,8 @@ NOT INTENDED FOR PRODUCTION USE
 
 ## What is this plugin
 
-This is just a POC to try and resolve all dependencies of a given entry point/project, delay the resolution of all `.css` files, until all other dependencies have been parsed and then expose the project dependencies via an environment variable for the `panda.config.ts` to consume in its `include` field.
+This is just a POC to resolve all dependencies of a project and expose the dependencies via an environment variable for the `panda.config.ts` to consume in its `include` field.
+Requires for the build process ro be ran twice. The first build resolves the dependencies and saves them to an ENV variable. The second build then reads the exposed dependencies in `panda.config.ts`.
 Works only in **build** mode.
 
 ## Usage
@@ -21,6 +22,8 @@ export default defineConfig({
     //...other plugins
     treeShakePandaCss({
       //envName -- optional. Name of the environment variable where the resolved dependencies are. Defaults to __TREE_SHAKE_PANDA_DEPENDENCIES__
+      //include -- optional. PicoMatch pattern of files that should be included in dependencies. Defaults to "**/*.{js,jsx,ts,tsx}".
+      //exclude -- optional. PicoMatch pattern of files that should be excluded from dependencies. Defaults to "node_modules/**/*".
     }),
   ],
 });
